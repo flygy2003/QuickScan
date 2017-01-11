@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.media.Image;
 
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -15,10 +14,6 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -30,14 +25,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-
-import static junit.framework.Assert.assertNotNull;
 
 public class MainActivity
         extends AppCompatActivity {
 
+    private static final String TAG = "ZOOM/D";
     FirebaseDatabase database;
     DatabaseReference myRef;
 
@@ -48,9 +41,8 @@ public class MainActivity
     CameraSource cameraSource;
 
     private static final int CAMERA_PERMISSION_CAMERA = 0x000000;
-    public static boolean position = false;
-    //Camera cam;
-    //Camera.Parameters p;
+    Camera camera;
+    Camera.Parameters parameters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,39 +52,34 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        camera = Camera.open();
+        parameters = camera.getParameters();
+        int zoom = parameters.getMaxZoom();
+        Log.d(TAG, "Zoom " + zoom);
+        int bcZoomSet = zoom / 4;
+        parameters.setZoom(bcZoomSet);
+        camera.setParameters(parameters);
+
         if (ContextCompat.checkSelfPermission(MainActivity
                 .this,
                 Manifest
                         .permission
                         .CAMERA)
                 != PackageManager
-                .PERMISSION_GRANTED) {
+                .PERMISSION_GRANTED) if (ActivityCompat
+                .shouldShowRequestPermissionRationale
+                        (MainActivity.this,
+                                Manifest.permission.CAMERA)) {
+        } else {
+            ActivityCompat.requestPermissions(MainActivity
+                            .this,
+                    new String[]{Manifest.permission
+                            .CAMERA},
+                    CAMERA_PERMISSION_CAMERA);
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity
-                    .this,
-                    Manifest
-                            .permission
-                            .CAMERA)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(MainActivity
-                        .this,
-                        new String[]{Manifest.permission
-                                .CAMERA},
-                        CAMERA_PERMISSION_CAMERA);
-
-                // CAMERA_PERMISSION_CAMERA is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
+            // CAMERA_PERMISSION_CAMERA is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
         }
 
         cameraView = (SurfaceView) findViewById(R
