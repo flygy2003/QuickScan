@@ -41,24 +41,9 @@ public class MainActivity
     CameraSource cameraSource;
 
     private static final int CAMERA_PERMISSION_CAMERA = 0x000000;
-    Camera camera;
-    Camera.Parameters parameters;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
 
-        setRequestedOrientation(ActivityInfo
-                .SCREEN_ORIENTATION_PORTRAIT);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        camera = Camera.open();
-        parameters = camera.getParameters();
-        int zoom = parameters.getMaxZoom();
-        Log.d(TAG, "Zoom " + zoom);
-        int bcZoomSet = zoom / 4;
-        parameters.setZoom(bcZoomSet);
-        camera.setParameters(parameters);
 
         if (ContextCompat.checkSelfPermission(MainActivity
                 .this,
