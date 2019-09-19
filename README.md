@@ -16,6 +16,6 @@ QuickScan offers a simple two screen interface for managing events.
 
 `The scanning interface` is a non-interactive page that automatically recognizes, scans, and uploads checkin-instances to the event bucket whenever an id-card passes the camera's view.
 
-#Instructions:
+# Instructions:
 
 Please clone the git repository for QuickScan, open the android project within the folder using Android Studio, and run the app on your mobile device. Feel free to distribute the APK and source at your convenience.
