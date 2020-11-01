@@ -19,3 +19,5 @@ QuickScan offers a simple two screen interface for managing events.
 # Instructions:
 
 Please clone the git repository for QuickScan, open the android project within the folder using Android Studio, and run the app on your mobile device. Feel free to distribute the APK and source at your convenience.
+
+![Gif Of App In Action](./run.gif)
